@@ -6,12 +6,13 @@ import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import thunkMiddleware from 'redux-thunk';
 import promiseMiddleware from 'redux-promise-middleware';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import createRootReducer from "./reducers";
 import * as serviceWorker from './serviceWorker';
 
-const store = createStore(combineReducers({
-
-}), applyMiddleware(thunkMiddleware, promiseMiddleware));
+const store = createStore(
+  combineReducers(createRootReducer()),
+  applyMiddleware(thunkMiddleware, promiseMiddleware),
+  );
 
 ReactDOM.render(
   <Provider store={store}>
