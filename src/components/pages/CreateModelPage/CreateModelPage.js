@@ -7,7 +7,10 @@ import FormComponent from '../../../components/form/FormComponent';
 import FormSelect from '../../form/FormSelect';
 import FormInputText from '../../form/FormInputText';
 import {sendFormAction} from '../../../actions/sendForm';
+import { selectLoadState } from '../../../selectors';
+import { LOAD_STATE, LOAD_STATE_FULFILLED } from '../../../constants/actionTypes';
 import {connect} from "react-redux";
+import SpinnerComponent from "../../Spinner";
 
 const setupLength = () => {
   const lengths = [];
@@ -19,26 +22,30 @@ const setupLength = () => {
   return lengths;
 };
 
-const CreateModelPage = ({ dispatch }) => {
+const CreateModelPage = ({ dispatch, load }) => {
   const [modelName, setModelName] = useState('');
   const [price, setPrice] = useState('');
   const [length, setLength] = useState(undefined);
   const [producer, setProducer] = useState(undefined);
-  const [material, setMaterial] = useState(undefined);
-  const [type, setType] = useState(undefined);
+  const [materialId, setMaterialId] = useState(undefined);
+  const [typeId, setTypeId] = useState(undefined);
 
   const changePrice = (value) => /[^\d]/g.test(value) ? null : setPrice(value);
-  const handleSubmit = () => dispatch(sendFormAction({
-    actionTo: 'addModel',
-    body: {
-      modelName,
-      price,
-      length,
-      producer,
-      material,
-      type,
-    },
-  }));
+
+  const handleSubmit = () => {
+    dispatch({ type: LOAD_STATE })
+    dispatch(sendFormAction({
+      actionTo: 'addModel',
+      body: {
+        modelName,
+        price,
+        length,
+        producer,
+        materialId,
+        typeId,
+      },
+    })).then(() => dispatch({ type: LOAD_STATE_FULFILLED }));
+  }
 
   const formElements = () => (
     <>
@@ -71,7 +78,7 @@ const CreateModelPage = ({ dispatch }) => {
           <FormSelect
             items={materialNames}
             isEmptyFirst={true}
-            onChange={setMaterial}
+            onChange={setMaterialId}
             title='Матеріал'
           />
         </Col>
@@ -86,7 +93,7 @@ const CreateModelPage = ({ dispatch }) => {
           <FormSelect
             title='Тип'
             items={hairTypeNames}
-            onChange={setType}
+            onChange={setTypeId}
             isEmptyFirst={true}
           />
         </Col>
@@ -96,17 +103,19 @@ const CreateModelPage = ({ dispatch }) => {
 
   return (
     <>
-      <div>
-      <FormComponent
+      { load ? <SpinnerComponent/> :
+        (<FormComponent
         elements={formElements}
         submit={handleSubmit}
         submitBtnText='Создать'
-      />
-      </div>
+      />)
+      }
     </>
   )
 };
 
-const mapStateToProps = () => ({});
+const mapStateToProps = (state) => ({
+  load: selectLoadState(state),
+});
 
 export default connect(mapStateToProps)(CreateModelPage);
