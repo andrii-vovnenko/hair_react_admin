@@ -11,16 +11,7 @@ import { selectLoadState } from '../../../selectors';
 import { LOAD_STATE, LOAD_STATE_FULFILLED } from '../../../constants/actionTypes';
 import {connect} from "react-redux";
 import SpinnerComponent from "../../Spinner";
-
-const setupLength = () => {
-  const lengths = [];
-  let l = 0;
-  while (l <= 80) {
-    lengths.push(l);
-    l+=5;
-  }
-  return lengths;
-};
+import { setupLengthIntoSelect } from '../../../helpers';
 
 const CreateModelPage = ({ dispatch, load }) => {
   const [modelName, setModelName] = useState('');
@@ -85,7 +76,7 @@ const CreateModelPage = ({ dispatch, load }) => {
         <Col>
           <FormSelect
             onChange={setLength}
-            items={setupLength()}
+            items={setupLengthIntoSelect()}
             title='Довжина'
           />
         </Col>

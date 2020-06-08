@@ -1,25 +1,20 @@
 import React from 'react';
-import {BrowserRouter as Router, Link, Route, Switch} from 'react-router-dom';
-import { Nav, NavItem, NavLink } from 'react-bootstrap';
+import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import CreateModelPage from './components/pages/CreateModelPage/CreateModelPage';
+import AllModelsPage from "./components/pages/AllModelsPage/AllModelsPage";
+import Navigation from "./components/Navigation";
 
 function App() {
  return (
    <>
-    <Router>
-     <Nav variant='pills' defaultActiveKey='/'>
-       <NavItem>
-        <NavLink as={Link} eventKey='/' to='/' >home</NavLink>
-       </NavItem>
-       <NavItem>
-        <NavLink as={Link} eventKey='/createModel' to='/createModel' >{'Создать модель'}</NavLink>
-       </NavItem>
-     </Nav>
-     <Switch>
-      <Route path='/' exact component={() => <h1>App</h1>} />
-      <Route path='/createModel' component={CreateModelPage} />
-     </Switch>
-    </Router>
+     <Router>
+       <Navigation/>
+       <Switch>
+         <Route path='/' exact component={() => <h1>App</h1>}/>
+         <Route path='/createModel' component={CreateModelPage}/>
+         <Route path='/allModels' component={AllModelsPage}/>
+       </Switch>
+     </Router>
    </>
  )
 }
