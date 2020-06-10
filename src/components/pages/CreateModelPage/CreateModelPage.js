@@ -12,8 +12,9 @@ import { LOAD_STATE, LOAD_STATE_FULFILLED } from '../../../constants/actionTypes
 import {connect} from "react-redux";
 import SpinnerComponent from "../../Spinner";
 import { setupLengthIntoSelect } from '../../../helpers';
+import StatusToast from "../../StatusToast";
 
-const CreateModelPage = ({ dispatch, load }) => {
+const CreateModelPage = ({ dispatch, load, status }) => {
   const [modelName, setModelName] = useState('');
   const [price, setPrice] = useState('');
   const [length, setLength] = useState(undefined);
@@ -96,17 +97,19 @@ const CreateModelPage = ({ dispatch, load }) => {
     <>
       { load ? <SpinnerComponent/> :
         (<FormComponent
-        elements={formElements}
-        submit={handleSubmit}
-        submitBtnText='Создать'
-      />)
+          elements={formElements}
+          submit={handleSubmit}
+          submitBtnText='Создать'
+        />)
       }
     </>
   )
 };
 
-const mapStateToProps = (state) => ({
-  load: selectLoadState(state),
-});
+const mapStateToProps = (state) => {
+  return {
+    load: selectLoadState(state),
+  }
+};
 
 export default connect(mapStateToProps)(CreateModelPage);
