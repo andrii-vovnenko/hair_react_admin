@@ -6,6 +6,14 @@ import producerNames from '../../../constants/producer/producerNames';
 import typeNames from '../../../constants/hairTypes/hairTypeNames';
 import {connect} from "react-redux";
 import {selectModels} from "../../../selectors";
+import {withRouter} from "react-router";
+import styled from "styled-components";
+
+const Tr = styled.div`
+  :hover {
+    cursor: pointer;
+  }
+`;
 
 const mapper = {
   materialId: (id) => materialNames[id],
@@ -21,28 +29,56 @@ const columnNamesMap = {
   typeId: 'тип',
 };
 
-const TableComponent = ({ models }) => {
-  const rows = models.map((modelObj) => pick(modelObj, [...Object.keys(columnNamesMap)]))
+const buildModelPageUrl = (modelId) => `/models/${modelId}`;
+
+const TableComponent = ({ models, history }) => {
+
+  const TableHead = ({columns}) => {
+    return (
+      <thead>
+        <tr>
+          {columns.map(name => <th key={name}>{name}</th>)}
+        </tr>
+      </thead>
+    )
+  };
+
+
+  const TableCell = ({ value }) => <td>{value}</td>
+
+  const TableBody = ({ rows, columnNames, columnNameForLink = '' }) => {
+    return (
+      <tbody>
+        {rows.map((row, i) =>
+          <Tr as='tr'
+            onClick={() => history.push(buildModelPageUrl(row[columnNameForLink]))} key={i}>
+          {columnNames.map((key) =>
+            <TableCell
+              key={key}
+              value={mapper[key] ? mapper[key](row[key]) : row[key]}
+            />)}
+        </Tr>)}
+      </tbody>
+    )
+  };
+  const rows = models.map((modelObj) => pick(modelObj, [...Object.keys(columnNamesMap), 'modelId']))
   return (
     <Table variant='dark'>
-      <thead>
-      <tr>
-        {Object.values(columnNamesMap).map(name => <th key={name} >{name}</th>)}
-      </tr>
-      </thead>
-      <tbody>
-      {rows.map((row, i) => <tr key={i}>
-        {Object.keys(columnNamesMap).map((key) => <td key={key}>{mapper[key] ? mapper[key](row[key]) : row[key]}</td>)}
-      </tr>)}
-      </tbody>
+      <TableHead columns={Object.values(columnNamesMap)} />
+      <TableBody
+        columnNames={Object.keys(columnNamesMap)}
+        rows={rows}
+        columnNameForLink='modelId'
+      />
     </Table>
   )
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, { history }) => {
   return {
     models: selectModels(state),
+    history,
   }
 };
 
-export default connect(mapStateToProps)(TableComponent);
+export default withRouter(connect(mapStateToProps)(TableComponent));
