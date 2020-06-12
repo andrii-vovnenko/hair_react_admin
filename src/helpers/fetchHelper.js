@@ -5,16 +5,23 @@ const { baseUrl } = require('../constants');
  * @param url {string}
  * @param method {string}
  * @param body {Object}
+ * @param params {Object}
  */
 export const fetchData = async ({
-  url, method = 'get', body = undefined,
+  url, method = 'get', body = undefined, params = undefined,
 }) => {
-  const res = await fetch(`${baseUrl}${url}`, {
+  let query = `${baseUrl}${url}`;
+
+  if (params) {
+    query += `?${Object.keys(params).map(key => `${key}=${params[key]}`).join('&')}`;
+  }
+
+  const res = await fetch(query, {
     method,
     headers: {
       'content-type': 'application/json',
     },
-    body: JSON.stringify(body),
+    body: body && JSON.stringify(body),
   });
   if (res.status !== 200) {
     return res;

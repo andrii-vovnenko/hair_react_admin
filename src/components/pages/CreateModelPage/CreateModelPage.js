@@ -12,15 +12,15 @@ import { LOAD_STATE, LOAD_STATE_FULFILLED } from '../../../constants/actionTypes
 import {connect} from "react-redux";
 import SpinnerComponent from "../../Spinner";
 import { setupLengthIntoSelect } from '../../../helpers';
-import StatusToast from "../../StatusToast";
+import {getModelAction} from "../../../actions/modelsActions";
 
-const CreateModelPage = ({ dispatch, load, status }) => {
-  const [modelName, setModelName] = useState('');
-  const [price, setPrice] = useState('');
-  const [length, setLength] = useState(undefined);
-  const [producer, setProducer] = useState(undefined);
-  const [materialId, setMaterialId] = useState(undefined);
-  const [typeId, setTypeId] = useState(undefined);
+const CreateModelPage = ({ dispatch, load, model = {}, submitButtonText = 'Создать', withRefresh = false }) => {
+  const [modelName, setModelName] = useState(model.modelName);
+  const [price, setPrice] = useState(model.price);
+  const [length, setLength] = useState(model.length);
+  const [producer, setProducer] = useState(model.producer);
+  const [materialId, setMaterialId] = useState(model.materialId);
+  const [typeId, setTypeId] = useState(model.typeId);
 
   const changePrice = (value) => /[^\d]/g.test(value) ? null : setPrice(value);
 
@@ -36,7 +36,15 @@ const CreateModelPage = ({ dispatch, load, status }) => {
         materialId,
         typeId,
       },
-    })).then(() => dispatch({ type: LOAD_STATE_FULFILLED }));
+    })).then(() => {
+      if (withRefresh) {
+        dispatch(getModelAction({ modelId: model.modelId })).then(() => {
+          dispatch({type: LOAD_STATE_FULFILLED});
+        });
+      } else {
+        dispatch({type: LOAD_STATE_FULFILLED});
+      }
+    });
   }
 
   const formElements = () => (
@@ -47,6 +55,7 @@ const CreateModelPage = ({ dispatch, load, status }) => {
             onChange={setModelName}
             title="Ім'я моделі"
             value={modelName}
+            disabled={!!model}
           />
         </Col>
         <Col>
@@ -62,16 +71,16 @@ const CreateModelPage = ({ dispatch, load, status }) => {
           <FormSelect
             onChange={setProducer}
             title='Виробник'
-            isEmptyFirst={true}
             items={producerNames}
+            defaultValue={producer}
           />
         </Col>
         <Col md='6'>
           <FormSelect
             items={materialNames}
-            isEmptyFirst={true}
             onChange={setMaterialId}
             title='Матеріал'
+            defaultValue={materialId}
           />
         </Col>
         <Col>
@@ -79,6 +88,7 @@ const CreateModelPage = ({ dispatch, load, status }) => {
             onChange={setLength}
             items={setupLengthIntoSelect()}
             title='Довжина'
+            defaultValue={length}
           />
         </Col>
         <Col>
@@ -86,7 +96,7 @@ const CreateModelPage = ({ dispatch, load, status }) => {
             title='Тип'
             items={hairTypeNames}
             onChange={setTypeId}
-            isEmptyFirst={true}
+            defaultValue={typeId}
           />
         </Col>
       </Row>
@@ -99,7 +109,7 @@ const CreateModelPage = ({ dispatch, load, status }) => {
         (<FormComponent
           elements={formElements}
           submit={handleSubmit}
-          submitBtnText='Создать'
+          submitBtnText={submitButtonText}
         />)
       }
     </>

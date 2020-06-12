@@ -5,7 +5,6 @@ const initState = [];
 export default (state = initState, action) => {
   const { type, payload } = action;
   if (type === GET_MODALS_FULFILLED) {
-    console.log('payload: ', payload);
     return payload;
   }
   return state;

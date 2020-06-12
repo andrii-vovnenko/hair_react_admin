@@ -2,7 +2,7 @@ import {FormControl, FormLabel} from "react-bootstrap";
 import React from "react";
 import WrapInput from "./WrapInput";
 
-const FormInputText = ({ title, onChange, value }) => (
+const FormInputText = ({ title, onChange, value, disabled = false }) => (
   <>
     <FormLabel>{ title }</FormLabel>
     <WrapInput>
@@ -10,6 +10,7 @@ const FormInputText = ({ title, onChange, value }) => (
         onChange={(e) => onChange(e.target.value)}
         type='text'
         value={value}
+        disabled={disabled}
       />
     </WrapInput>
   </>

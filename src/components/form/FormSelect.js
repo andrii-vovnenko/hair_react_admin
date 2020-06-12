@@ -4,15 +4,16 @@ import React from "react";
 import WrapInput from "./WrapInput";
 
 
-const FormSelect = ({ title, onChange, isEmptyFirst = false, items }) => (
+const FormSelect = ({ title, onChange, isEmptyFirst = false, items, defaultValue }) => (
   <>
     <FormLabel>{title}</FormLabel>
     <WrapInput>
       <FormControl
         as='select'
         onChange={(e) => onChange(e.target.value)}
+        defaultValue={defaultValue}
       >
-        {isEmptyFirst ? <option value={0}/> : null}
+        {!defaultValue ? <option value={0}/> : null}
         {selectOptionsFromObject(items)}
       </FormControl>
     </WrapInput>

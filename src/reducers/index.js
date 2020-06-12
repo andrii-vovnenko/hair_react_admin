@@ -3,6 +3,7 @@ import loadState from './loadStateReducer';
 import sendForm from './sendFormReducer';
 import models from './modelsReducer';
 import status from './statusReducer';
+import currentModel from './currentModelReducer';
 
 const createRootReducer = () => ({
   colors,
@@ -10,6 +11,7 @@ const createRootReducer = () => ({
   sendForm,
   models,
   status,
+  currentModel,
 });
 
 export default createRootReducer;
