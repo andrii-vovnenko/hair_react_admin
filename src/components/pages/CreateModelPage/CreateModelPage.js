@@ -15,8 +15,8 @@ import { setupLengthIntoSelect } from '../../../helpers';
 import {getModelAction} from "../../../actions/modelsActions";
 
 const CreateModelPage = ({ dispatch, load, model = {}, submitButtonText = 'Создать', withRefresh = false }) => {
-  const [modelName, setModelName] = useState(model.modelName);
-  const [price, setPrice] = useState(model.price);
+  const [modelName, setModelName] = useState(model.modelName || '');
+  const [price, setPrice] = useState(model.price || '');
   const [length, setLength] = useState(model.length);
   const [producer, setProducer] = useState(model.producer);
   const [materialId, setMaterialId] = useState(model.materialId);
@@ -55,7 +55,7 @@ const CreateModelPage = ({ dispatch, load, model = {}, submitButtonText = 'Со�
             onChange={setModelName}
             title="Ім'я моделі"
             value={modelName}
-            disabled={!!model}
+            disabled={withRefresh}
           />
         </Col>
         <Col>
