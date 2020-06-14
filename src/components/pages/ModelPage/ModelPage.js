@@ -9,9 +9,11 @@ import AvailableColorsComponent from "./AvailableColorsComponent";
 import {Col, Row, Button} from "react-bootstrap";
 import CreateModelColorComponent from "./CreateModelColorComponent";
 import CreateColorModal from "../CreateColorModal/CreateColorModal";
+import UploadedPhotos from "./UploadedPhotos";
 
 const ModelPage = ({ modelId, dispatch, model, load }) => {
   const [showModal, setShowModal] = useState(false);
+
   useEffect(() => {
     dispatch({ type: LOAD_STATE })
     dispatch(getModelAction({ modelId })).then(() => dispatch({ type: LOAD_STATE_FULFILLED }));
@@ -49,6 +51,7 @@ const ModelPage = ({ modelId, dispatch, model, load }) => {
           </Button>
         </Col>
       </Row>
+      <UploadedPhotos />
     </>
   )
 };
