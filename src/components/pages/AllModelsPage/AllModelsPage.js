@@ -8,6 +8,7 @@ import TableComponent from "./TableComponent";
 import materialNames from "../../../constants/material/materialNames";
 import producerNames from "../../../constants/producer/producerNames";
 import typeNames from "../../../constants/hairTypes/hairTypeNames";
+import {withRouter} from "react-router";
 
 const mapper = {
   materialId: (id) => materialNames[id],
@@ -21,10 +22,9 @@ const columnNamesMap = {
   producer: 'виробник',
   typeId: 'тип',
 };
-const buildModelPageUrl = (modelId) => `/models/${modelId}`;
+const buildModelPageUrl = (param) => `/models/${param}`;
 
-
-const AllModelsPage = ({ dispatch, load, models }) => {
+const AllModelsPage = ({ dispatch, load, models, history }) => {
   useEffect(() => {
     dispatch({type: LOAD_STATE})
     dispatch(getModelsAction()).then(() => dispatch({type: LOAD_STATE_FULFILLED}));
@@ -32,22 +32,25 @@ const AllModelsPage = ({ dispatch, load, models }) => {
 
   if (load) return <SpinnerComponent />
 
+  const onClick = ({ modelId }) => history.push(buildModelPageUrl(modelId))
+
   return (
     <TableComponent
       mapper={mapper}
       columnNamesMap={columnNamesMap}
-      buildModelPageUrl={buildModelPageUrl}
-      columnNameForLink='modelId'
+      columnNameForLink={['modelId']}
       models={models}
+      onClick={onClick}
     />
   )
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, { history }) => {
   return {
     load: selectLoadState(state),
     models: selectModels(state),
+    history,
   };
 };
 
-export default connect(mapStateToProps)(AllModelsPage);
+export default withRouter(connect(mapStateToProps)(AllModelsPage));

@@ -2,9 +2,12 @@ import React from "react";
 import {connect} from "react-redux";
 import get from 'lodash/get';
 import pick from 'lodash/pick';
-import {selectColors, selectModelColors} from "../../../selectors";
+import {selectColors, selectCurrentModelColor, selectModelColors} from "../../../selectors";
 import TableComponent from "../AllModelsPage/TableComponent";
 import colorTypeIds from '../../../constants/hairColor/hairColorTypeNames';
+import {withRouter} from "react-router";
+import { INIT_CURRENT_MODELCOLOR } from '../../../constants/actionTypes';
+
 
 const columnNamesMap = {
   colorName: 'колір',
@@ -14,23 +17,25 @@ const columnNamesMap = {
 const mapper = {
   colorTypeId: (id) => colorTypeIds[id],
 };
-const buildModelPhotosPageUrl = (modelColorId) => `/models/photos/${modelColorId}`;
 
-const AvailableColorsComponent = ({ modelColors, colors }) => {
+const AvailableColorsComponent = ({ modelColors, colors, history, dispatch }) => {
+
+  const onClick = (param) => dispatch({ type: INIT_CURRENT_MODELCOLOR, payload: param });
+
   return (
     <>
       <TableComponent
         columnNamesMap={columnNamesMap}
         mapper={mapper}
         models={modelColors}
-        columnNameForLink='modelColorId'
-        buildModelPageUrl={buildModelPhotosPageUrl}
+        columnNameForLink={['modelColorId', 'modelId', 'colorId']}
+        onClick={onClick}
       />
     </>
   )
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, { history }) => {
   const modelColors = selectModelColors(state);
   const colors = selectColors(state);
   modelColors
@@ -42,6 +47,7 @@ const mapStateToProps = (state) => {
   return {
     modelColors,
     colors,
+    history,
   }
 };
-export default connect(mapStateToProps)(AvailableColorsComponent);
+export default withRouter(connect(mapStateToProps)(AvailableColorsComponent));

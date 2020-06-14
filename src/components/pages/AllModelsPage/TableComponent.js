@@ -1,8 +1,7 @@
 import React from "react";
 import {Table} from "react-bootstrap";
-import {connect} from "react-redux";
-import {withRouter} from "react-router";
 import styled from "styled-components";
+import pick from "lodash/pick";
 
 const Tr = styled.div`
   :hover {
@@ -10,7 +9,7 @@ const Tr = styled.div`
   }
 `;
 
-const TableComponent = ({ models, history, columnNamesMap, mapper, buildModelPageUrl, columnNameForLink = '' }) => {
+const TableComponent = ({ models, columnNamesMap, mapper, columnNameForLink = '', onClick }) => {
 
   const TableHead = ({columns}) => {
     return (
@@ -29,7 +28,7 @@ const TableComponent = ({ models, history, columnNamesMap, mapper, buildModelPag
       <tbody>
         {rows.map((row, i) =>
           <Tr as='tr'
-            onClick={() => history.push(buildModelPageUrl(row[columnNameForLink]))} key={i}>
+            onClick={() => onClick(pick(row, [...columnNameForLink]))} key={i}>
           {columnNames.map((key) =>
             <TableCell
               key={key}
@@ -51,10 +50,5 @@ const TableComponent = ({ models, history, columnNamesMap, mapper, buildModelPag
   )
 };
 
-const mapStateToProps = (state, { history }) => {
-  return {
-    history,
-  }
-};
 
-export default withRouter(connect(mapStateToProps)(TableComponent));
+export default (TableComponent);

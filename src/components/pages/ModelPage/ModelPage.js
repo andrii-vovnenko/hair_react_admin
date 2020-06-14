@@ -1,6 +1,11 @@
 import React, {useEffect, useState} from "react";
 import  {connect } from "react-redux";
-import {selectCurrentModel, selectLoadState, selectModelIdFromParams} from "../../../selectors";
+import {
+  selectCurrentModel,
+  selectCurrentModelColor,
+  selectLoadState,
+  selectModelIdFromParams
+} from "../../../selectors";
 import { getModelAction } from '../../../actions/modelsActions';
 import {LOAD_STATE, LOAD_STATE_FULFILLED} from "../../../constants/actionTypes";
 import SpinnerComponent from "../../Spinner";
@@ -11,7 +16,7 @@ import CreateModelColorComponent from "./CreateModelColorComponent";
 import CreateColorModal from "../CreateColorModal/CreateColorModal";
 import UploadedPhotos from "./UploadedPhotos";
 
-const ModelPage = ({ modelId, dispatch, model, load }) => {
+const ModelPage = ({ modelId, dispatch, model, load, currentModelColor }) => {
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
@@ -51,7 +56,7 @@ const ModelPage = ({ modelId, dispatch, model, load }) => {
           </Button>
         </Col>
       </Row>
-      <UploadedPhotos />
+      <UploadedPhotos currentModelColor={currentModelColor} />
     </>
   )
 };
@@ -61,6 +66,7 @@ const mapStateToProps = (state, { match }) => {
     load: selectLoadState(state),
     modelId: selectModelIdFromParams(match),
     model: selectCurrentModel(state),
+    currentModelColor: selectCurrentModelColor(state),
   }
 };
 

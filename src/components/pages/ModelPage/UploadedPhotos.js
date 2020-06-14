@@ -10,7 +10,7 @@ const Wrap = styled.div`
   border-radius: 10px;
 `;
 
-const UploadedPhotos = ({ }) => {
+const UploadedPhotos = ({ currentModelColor }) => {
   const [previewFiles, setPreviewFiles] = useState([]);
   const [filesToUpload, setFilesToUpload] = useState({});
 
@@ -24,7 +24,7 @@ const UploadedPhotos = ({ }) => {
     Object.values(filesToUpload).forEach(file => {
       formData.append('files', file);
     })
-    console.log('formData: ', formData.getAll('files'))
+    formData.append('additionalData', JSON.stringify(currentModelColor));
     await fetch(`${baseUrl}admin/images/upload`, {
       method: 'post',
       body: formData,

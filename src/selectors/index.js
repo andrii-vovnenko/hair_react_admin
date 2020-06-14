@@ -19,3 +19,4 @@ export const selectColors = (state) => {
   const colors = get(state, ['entities', 'colors'], {});
   return keyBy(colors, 'colorId');
 };
+export const selectCurrentModelColor = (state) => state.currentModelColor;
