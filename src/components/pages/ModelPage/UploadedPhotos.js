@@ -1,69 +1,75 @@
-import {Button, Col, Row, FormFile} from "react-bootstrap";
+import {Col, Row, FormFile} from "react-bootstrap";
 import React, {useState} from "react";
 import FormComponent from "../../form/FormComponent";
-import styled from "styled-components";
-import {keyBy, omit} from "lodash";
-import {baseUrl} from "../../../constants";
+import keyBy from "lodash/keyBy";
+import omit from "lodash/omit";
+import {
+  selectCurrentModelColor, selectedColorName, selectUploadedPhotos,
+} from "../../../selectors";
+import {connect} from "react-redux";
+import UploadedPhotosContainer from './UploadedPhotosContainer';
+import PreviewPhotosContainer from "./PreviewPhotosContainer";
+import { sendPhotosAction } from '../../../actions/sendForm';
+import {sendFormAction} from "../../../actions/sendForm";
 
-const Wrap = styled.div`
-  border: 1px solid black;
-  border-radius: 10px;
-`;
-
-const UploadedPhotos = ({ currentModelColor }) => {
-  const [previewFiles, setPreviewFiles] = useState([]);
+const UploadedPhotos = ({ currentModelColor, selectedColorName = '', uploadedPhotos, dispatch }) => {
   const [filesToUpload, setFilesToUpload] = useState({});
 
-  const addFile = async (e) => {
+  const addPreviewPhoto = (e) => {
     const {files} = e.target;
     setFilesToUpload(Object.assign(keyBy(filesToUpload, 'name'), keyBy(files, 'name')));
   };
-  const deleteUploadedPhoto = (fileName) => setFilesToUpload(omit(filesToUpload, fileName));
-  const sendPhoto = async () => {
-    const formData = new FormData();
-    Object.values(filesToUpload).forEach(file => {
-      formData.append('files', file);
-    })
-    formData.append('additionalData', JSON.stringify(currentModelColor));
-    await fetch(`${baseUrl}admin/images/upload`, {
-      method: 'post',
-      body: formData,
-    })
+  const deletePreviewPhoto = (fileName) => setFilesToUpload(omit(filesToUpload, fileName));
+
+  const deleteUploadedPhoto = (photoId) => {
+    dispatch(sendFormAction({
+      actionTo: 'images/delete',
+      body: { photoId },
+    }));
+  };
+  const sendPhoto = () => {
+    dispatch(sendPhotosAction({ filesToUpload, currentModelColor }));
   }
 
-
   return (
-    <Wrap>
-      <FormComponent
-        submit={() => sendPhoto()}
-        elements={() => (<FormFile label='фото для завантаження' onChange={addFile} multiple/>)}
-        submitBtnText='загрузить'
-      />
+    <>
       <Row>
-        {
-          Object.values(filesToUpload).map(file => {
-            const imagePath = URL.createObjectURL(file);
-            return (
-              <Col xs={12} md={4} key={file.name}>
-                <img
-                  src={imagePath}
-                  width="180px"
-                  height="180px"
-                  alt='фото для загрузки'
-                />
-                <Button
-                  variant='danger'
-                  onClick={() => deleteUploadedPhoto(file.name)}
-                >
-                  delete
-                </Button>
-              </Col>
-            )
-          })
-        }
+        <Col xs={12} sm={4}>
+          {selectedColorName && <FormComponent
+            submit={() => sendPhoto()}
+            elements={() => (
+              <FormFile
+                label={`фото для завантаження кольору ${selectedColorName}`}
+                onChange={addPreviewPhoto}
+                multiple
+              />)}
+            submitBtnText='загрузить'
+          />}
+        </Col>
+        <Col xs={12} sm={8}>
+          <UploadedPhotosContainer
+            uploadedPhotos={uploadedPhotos}
+            title='Загруженні фото'
+            onClick={deleteUploadedPhoto}
+          />
+          <PreviewPhotosContainer
+            onClick={deletePreviewPhoto}
+            filesToUpload={filesToUpload}
+          />
+        </Col>
       </Row>
-    </Wrap>
+    </>
   )
 };
 
-export default UploadedPhotos;
+const mapStateToProps = (state) => {
+  const currentModelColor = selectCurrentModelColor(state);
+  const { modelColorId } = currentModelColor;
+  return {
+    selectedColorName: selectedColorName(state),
+    currentModelColor,
+    uploadedPhotos: selectUploadedPhotos(state, modelColorId),
+  }
+};
+
+export default connect(mapStateToProps)(UploadedPhotos);

@@ -2,7 +2,6 @@ import React, {useEffect, useState} from "react";
 import  {connect } from "react-redux";
 import {
   selectCurrentModel,
-  selectCurrentModelColor,
   selectLoadState,
   selectModelIdFromParams
 } from "../../../selectors";
@@ -16,7 +15,7 @@ import CreateModelColorComponent from "./CreateModelColorComponent";
 import CreateColorModal from "../CreateColorModal/CreateColorModal";
 import UploadedPhotos from "./UploadedPhotos";
 
-const ModelPage = ({ modelId, dispatch, model, load, currentModelColor }) => {
+const ModelPage = ({ modelId, dispatch, model, load }) => {
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
@@ -56,7 +55,7 @@ const ModelPage = ({ modelId, dispatch, model, load, currentModelColor }) => {
           </Button>
         </Col>
       </Row>
-      <UploadedPhotos currentModelColor={currentModelColor} />
+      <UploadedPhotos />
     </>
   )
 };
@@ -66,7 +65,6 @@ const mapStateToProps = (state, { match }) => {
     load: selectLoadState(state),
     modelId: selectModelIdFromParams(match),
     model: selectCurrentModel(state),
-    currentModelColor: selectCurrentModelColor(state),
   }
 };
 

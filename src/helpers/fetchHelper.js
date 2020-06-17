@@ -28,3 +28,15 @@ export const fetchData = async ({
   }
   return await res.json();
 };
+
+export const sendFormData = async ({ formData, url }) => {
+  const res = await fetch(`${baseUrl}${url}`, {
+    method: 'post',
+    body: formData,
+  });
+
+  if (res.status !== 200) {
+    return res;
+  }
+  return await res.json();
+};

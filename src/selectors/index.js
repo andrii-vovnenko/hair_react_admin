@@ -20,3 +20,14 @@ export const selectColors = (state) => {
   return keyBy(colors, 'colorId');
 };
 export const selectCurrentModelColor = (state) => state.currentModelColor;
+const selectedModelName = (state) => selectCurrentModel(state).modelName;
+
+export const selectedColorName = (state) => {
+  const { colorId } = selectCurrentModelColor(state);
+  const colors = selectColors(state);
+  return get(colors, [colorId, 'colorName'], '');
+};
+
+export const selectUploadedPhotos = (state, modelColorId) => {
+  return get(state, ['entities', 'photos', modelColorId], []);
+};
