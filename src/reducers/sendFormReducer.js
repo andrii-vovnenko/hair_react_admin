@@ -1,13 +1,17 @@
 import { SEND_FORM_FULFILLED, SEND_FORM_PENDING, SEND_FORM_REJECTED } from '../constants/actionTypes';
 
-export default (state = {}, action) => {
+const initState = {
+  sending: false,
+}
+
+export default (state = initState, action) => {
   const { type } = action;
   if (type === SEND_FORM_FULFILLED) {
-    return state;
+    return { sending: false };
   } else if (type === SEND_FORM_PENDING) {
-    return state;
+    return { sending: true };
   } else if (type === SEND_FORM_REJECTED) {
-    return state;
+    return { sending: false };
   }
   return state;
 };

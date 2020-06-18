@@ -4,15 +4,18 @@ import FormComponent from "../../form/FormComponent";
 import keyBy from "lodash/keyBy";
 import omit from "lodash/omit";
 import {
-  selectCurrentModelColor, selectedColorName, selectUploadedPhotos,
+  selectCurrentModelColor, selectedColorName, selectSendingStatus, selectUploadedPhotos,
 } from "../../../selectors";
 import {connect} from "react-redux";
 import UploadedPhotosContainer from './UploadedPhotosContainer';
 import PreviewPhotosContainer from "./PreviewPhotosContainer";
 import { sendPhotosAction } from '../../../actions/sendForm';
 import {sendFormAction} from "../../../actions/sendForm";
+import SpinnerComponent from "../../Spinner";
 
-const UploadedPhotos = ({ currentModelColor, selectedColorName = '', uploadedPhotos, dispatch }) => {
+const UploadedPhotos = ({
+  currentModelColor, selectedColorName = '', uploadedPhotos, dispatch, sending,
+}) => {
   const [filesToUpload, setFilesToUpload] = useState({});
 
   const addPreviewPhoto = (e) => {
@@ -27,9 +30,13 @@ const UploadedPhotos = ({ currentModelColor, selectedColorName = '', uploadedPho
       body: { photoId },
     }));
   };
+
   const sendPhoto = () => {
     dispatch(sendPhotosAction({ filesToUpload, currentModelColor }));
+    setFilesToUpload({});
   }
+
+  if (sending) return <SpinnerComponent />
 
   return (
     <>
@@ -49,7 +56,7 @@ const UploadedPhotos = ({ currentModelColor, selectedColorName = '', uploadedPho
         <Col xs={12} sm={8}>
           <UploadedPhotosContainer
             uploadedPhotos={uploadedPhotos}
-            title='Загруженні фото'
+            title='Завантаженні фото'
             onClick={deleteUploadedPhoto}
           />
           <PreviewPhotosContainer
@@ -66,6 +73,7 @@ const mapStateToProps = (state) => {
   const currentModelColor = selectCurrentModelColor(state);
   const { modelColorId } = currentModelColor;
   return {
+    sending: selectSendingStatus(state),
     selectedColorName: selectedColorName(state),
     currentModelColor,
     uploadedPhotos: selectUploadedPhotos(state, modelColorId),

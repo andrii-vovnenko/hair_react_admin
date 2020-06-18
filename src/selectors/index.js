@@ -1,5 +1,6 @@
 import get from 'lodash/get';
 import keyBy from 'lodash/keyBy';
+import sendForm from "../reducers/sendFormReducer";
 
 export const selectHairColors = (state) => state.colors;
 export const selectLoadState = (state) => state.loadState;
@@ -31,3 +32,5 @@ export const selectedColorName = (state) => {
 export const selectUploadedPhotos = (state, modelColorId) => {
   return get(state, ['entities', 'photos', modelColorId], []);
 };
+
+export const selectSendingStatus = (state) => state.sendForm.sending;
