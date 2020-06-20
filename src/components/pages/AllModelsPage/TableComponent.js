@@ -40,7 +40,7 @@ const TableComponent = ({ models, columnNamesMap, mapper, columnNameForLink = ''
   };
 
   return (
-    <Table variant='dark'>
+    <Table variant='dark' hover>
       <TableHead columns={Object.values(columnNamesMap)} />
       <TableBody
         columnNames={Object.keys(columnNamesMap)}

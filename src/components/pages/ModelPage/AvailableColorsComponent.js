@@ -18,7 +18,7 @@ const mapper = {
   colorTypeId: (id) => colorTypeIds[id],
 };
 
-const AvailableColorsComponent = ({ modelColors, colors, history, dispatch }) => {
+const AvailableColorsComponent = ({ modelColors, dispatch }) => {
 
   const onClick = (param) => dispatch({ type: INIT_CURRENT_MODELCOLOR, payload: param });
 

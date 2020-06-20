@@ -12,7 +12,7 @@ const Navigation = ({ location }) => {
         <NavLink as={Link} eventKey='/' to='/' >home</NavLink>
       </NavItem>
       <NavItem>
-        <NavLink as={Link} eventKey='/createModel' to='/createModel' >{'Создать модель'}</NavLink>
+        <NavLink as={Link} eventKey='/createModel' to='/createModel' >{'Створити модель'}</NavLink>
       </NavItem>
       <NavItem>
         <NavLink as={Link} eventKey='/models' to='/models' >{'Всі моделі'}</NavLink>

@@ -1,6 +1,5 @@
 import get from 'lodash/get';
 import keyBy from 'lodash/keyBy';
-import sendForm from "../reducers/sendFormReducer";
 
 export const selectHairColors = (state) => state.colors;
 export const selectLoadState = (state) => state.loadState;
@@ -16,6 +15,7 @@ export const selectModelColors = (state) => {
   const model = selectCurrentModel(state);
   return get(model, 'colors', []);
 };
+export const selectAllColors = (state) => state.colors;
 export const selectColors = (state) => {
   const colors = get(state, ['entities', 'colors'], {});
   return keyBy(colors, 'colorId');
@@ -34,3 +34,6 @@ export const selectUploadedPhotos = (state, modelColorId) => {
 };
 
 export const selectSendingStatus = (state) => state.sendForm.sending;
+export const selectDynamicFormData = (state) => state.dynamicFormData;
+export const selectDynamicFormDataLoad = (state) => selectDynamicFormData(state).load;
+export const selectDynamicFormDataModels = (state) => get(selectDynamicFormData(state), ['modelsData'], []);

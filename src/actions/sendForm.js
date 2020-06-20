@@ -17,6 +17,7 @@ const sendFormWithPhotos = ({ filesToUpload, currentModelColor }) => {
   Object.values(filesToUpload).forEach(file => {
     formData.append('files', file);
   })
+  console.log('formData: ', formData)
   formData.append('additionalData', JSON.stringify(currentModelColor));
   return sendFormData({ formData, url: 'admin/images/upload' });
 };

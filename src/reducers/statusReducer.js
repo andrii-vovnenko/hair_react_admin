@@ -1,4 +1,4 @@
-import { CLEAR_STATUS, UPDATE_STATUS, UPDATE_STATUS_FAIL, UPDATE_STATUS_SUCCESS } from '../constants/actionTypes';
+import { CLEAR_STATUS } from '../constants/actionTypes';
 import get from 'lodash/get';
 
 const initState = ''

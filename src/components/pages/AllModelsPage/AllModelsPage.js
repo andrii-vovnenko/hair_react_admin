@@ -14,6 +14,7 @@ const mapper = {
   materialId: (id) => materialNames[id],
   producer: (id) => producerNames[id],
   typeId: (id) => typeNames[id],
+  count: (count) => count || 0,
 };
 const columnNamesMap = {
   modelName: 'модель',
@@ -21,6 +22,7 @@ const columnNamesMap = {
   price: 'ціна',
   producer: 'виробник',
   typeId: 'тип',
+  count: 'к-сть',
 };
 const buildModelPageUrl = (param) => `/models/${param}`;
 
