@@ -17,6 +17,9 @@ const Navigation = ({ location }) => {
       <NavItem>
         <NavLink as={Link} eventKey='/models' to='/models' >{'Всі моделі'}</NavLink>
       </NavItem>
+      <NavItem>
+        <NavLink as={Link} eventKey='/sellStatistic' to='/sellStatistic' >{'Продажі'}</NavLink>
+      </NavItem>
     </Nav>
   )
 }

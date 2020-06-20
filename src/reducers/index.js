@@ -7,6 +7,7 @@ import currentModel from './currentModelReducer';
 import entities from './entitiesReducer';
 import currentModelColor from './currentModelColorReducer';
 import dynamicFormData from './dynamicFormData';
+import statistics from './statisticsReducer';
 
 const createRootReducer = () => ({
   colors,
@@ -18,6 +19,7 @@ const createRootReducer = () => ({
   entities,
   currentModelColor,
   dynamicFormData,
+  statistics,
 });
 
 export default createRootReducer;

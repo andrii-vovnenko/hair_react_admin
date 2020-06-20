@@ -9,7 +9,7 @@ const Tr = styled.div`
   }
 `;
 
-const TableComponent = ({ models, columnNamesMap, mapper, columnNameForLink = '', onClick }) => {
+const TableComponent = ({ models, columnNamesMap, mapper = {}, columnNameForLink = '', onClick }) => {
 
   const TableHead = ({columns}) => {
     return (

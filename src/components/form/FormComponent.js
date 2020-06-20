@@ -2,7 +2,7 @@ import React from 'react';
 import { Form, Button } from 'react-bootstrap';
 
 const FormComponent = ({
-  submit, submitBtnText, elements, children
+  submit, submitBtnText, elements
 }) => {
 
   const handleSubmit = (e) => {
@@ -17,7 +17,6 @@ const FormComponent = ({
         <Button type='submit' className='mt-2' variant='outline-success'>
           {submitBtnText}
         </Button>
-        {children}
       </Form>
     </>
   )
