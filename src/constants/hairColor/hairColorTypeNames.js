@@ -1,6 +1,10 @@
-const { AMBRE, DARK, HIGHLIGHTS, HIGHLIGHTS_DARK, HIGHLIGHTS_LIGHT, LIGHT, RED } = require('./hairColorTypeIds');
+import ids from './hairColorTypeIds';
 
-module.exports = {
+const {
+  LIGHT, DARK, RED, HIGHLIGHTS, HIGHLIGHTS_LIGHT, HIGHLIGHTS_DARK, AMBRE,
+} = ids;
+
+export default {
   [AMBRE]: 'Амбре',
   [DARK]: 'Темний',
   [HIGHLIGHTS_LIGHT]: 'Міліровка світла',
@@ -8,4 +12,4 @@ module.exports = {
   [HIGHLIGHTS]: 'Міліровка',
   [LIGHT]: 'Світлий',
   [RED]: 'Рудий',
-}
+};

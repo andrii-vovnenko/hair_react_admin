@@ -5,7 +5,7 @@ const initState = {
 }
 
 export default (state = initState, action) => {
-  const { type } = action;
+  const { type, payload } = action;
   if (type === SEND_FORM_FULFILLED) {
     return { sending: false };
   } else if (type === SEND_FORM_PENDING) {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import hairColorTypes from '../../../constants/hairColor/hairColorTypeNames';
 import {FormGroup, FormLabel, FormControl, Col} from 'react-bootstrap';
 import FormComponent from '../../../components/form/FormComponent';
@@ -6,10 +6,12 @@ import { addColorAction }  from '../../../actions/colorsActionCreator';
 import {connect} from 'react-redux';
 import ModalComponent from '../../../components/modals/ModalComponent';
 import {selectOptionsFromObject} from '../../../helpers';
+import {selectSendingStatus} from "../../../selectors";
+import SpinnerComponent from "../../Spinner";
 
 
 const CreateColorModal = ({
-  addColor, isShowModal, closeModal,
+  addColor, isShowModal, closeModal, sending,
 }) => {
   const [colorTypeId, setColorTypeId] = useState(undefined);
   const [colorName, setColorName] = useState('');
@@ -21,6 +23,14 @@ const CreateColorModal = ({
     if (!colorTypeId || !colorName) return;
     addColor({colorTypeId, colorName});
   };
+
+  useEffect(() => {
+    if (!sending && (colorName && colorTypeId)) {
+      setColorTypeId(undefined);
+      setColorName('');
+      closeModal();
+    }
+  }, [sending])
 
   const formElements = () => (
     <>
@@ -47,19 +57,27 @@ const CreateColorModal = ({
           close={closeModal}
           show={isShowModal}
         >
-          <FormComponent
-            elements={formElements}
-            submit={handleSubmit}
-            submitBtnText='Додати'
-          />
+          {
+            sending ? <SpinnerComponent/> : (
+              <FormComponent
+                elements={formElements}
+                submit={handleSubmit}
+                submitBtnText='Додати'
+              />
+            )
+          }
         </ModalComponent>
       </Col>
     </>
   )
 };
 
+const mapStateToProps = (state) => ({
+  sending: selectSendingStatus(state),
+})
+
 const mapDispatchToProps = (dispatch) => ({
   addColor: ({ colorTypeId, colorName }) => dispatch(addColorAction({ colorName, colorTypeId })),
 });
 
-export default connect(null, mapDispatchToProps)(CreateColorModal);
+export default connect(mapStateToProps, mapDispatchToProps)(CreateColorModal);

@@ -1,8 +1,8 @@
-import { GET_COLORS } from '../constants/actionTypes';
+import { GET_COLORS, SEND_FORM } from '../constants/actionTypes';
 import { addColor, getColors } from '../helpers/colorFetchHelper';
 
 export const addColorAction = ({ colorTypeId, colorName }) => ({
-  type: GET_COLORS,
+  type: SEND_FORM,
   payload: addColor({ colorTypeId, colorName }),
 });
 

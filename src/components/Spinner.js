@@ -3,9 +3,7 @@ import React from "react";
 import {Spinner} from "react-bootstrap";
 
 const SpinnerWrap = styled.div`
-  position: relative;
-  top: 20vh;
-  left: 50vw;
+  display: flex;
 `;
 
 const SpinnerComponent = () => (

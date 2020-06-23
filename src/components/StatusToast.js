@@ -6,7 +6,7 @@ import {CLEAR_STATUS} from "../constants/actionTypes";
 import styled from "styled-components";
 
 const Wrap = styled.div`
-  position: absolute;
+  position: fixed;
   top: 0;
   right: 0;
   min-width: 200px;

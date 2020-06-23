@@ -1,4 +1,4 @@
-module.exports = {
+const ids = {
   LIGHT: 1,
   DARK: 2,
   RED: 3,
@@ -7,3 +7,4 @@ module.exports = {
   HIGHLIGHTS_DARK: 6,
   AMBRE: 7,
 };
+export default ids;

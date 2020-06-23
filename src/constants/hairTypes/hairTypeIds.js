@@ -1,4 +1,4 @@
-module.exports = {
+const ids = {
   WIG: 1,
   WEAVE: 2,
   TAIL: 3,
@@ -6,4 +6,6 @@ module.exports = {
   HAIR_EXTENSION: 5,
   NAKLADKA: 6,
   BANGS: 7,
-}
+};
+
+export default ids;
