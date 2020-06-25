@@ -28,7 +28,7 @@ const AvailableColorsComponent = ({ modelColors, dispatch }) => {
         columnNamesMap={columnNamesMap}
         mapper={mapper}
         models={modelColors}
-        columnNameForLink={['modelColorId', 'modelId', 'colorId']}
+        columnNameForLink={['modelColorId', 'modelId', 'colorId', 'count']}
         onClick={onClick}
       />
     </>

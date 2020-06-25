@@ -1,6 +1,6 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {connect} from "react-redux";
-import {selectColors, selectCurrentModel} from "../../../selectors";
+import {selectColors, selectCurrentModel, selectCurrentModelColor} from "../../../selectors";
 import FormComponent from "../../form/FormComponent";
 import FormSelect from "../../form/FormSelect";
 import FormInputText from "../../form/FormInputText";
@@ -8,18 +8,27 @@ import {LOAD_STATE, LOAD_STATE_FULFILLED} from "../../../constants/actionTypes";
 import {sendFormAction} from "../../../actions/sendForm";
 import {getModelAction} from "../../../actions/modelsActions";
 
-const CreateModelColorComponent = ({ colors, load, currentModelId, dispatch }) => {
-  const [colorId, setColorId] = useState(undefined);
+const CreateModelColorComponent = ({
+   colors, load, currentModelId, dispatch, selectedCount, selectedColorId,
+}) => {
+  const [colorId, setColorId] = useState(0);
   const [count, setCount] = useState('');
 
-  const changeCount = (value) => /[^\d]/g.test(value) ? null : setCount(value);
+  useEffect(() => {
+    if (selectedCount && selectedColorId) {
+      setColorId(selectedColorId);
+      setCount(String(selectedCount));
+    }
+  }, [selectedCount, selectedColorId])
+
+  const changeCount = (value) => /[^\d-]/g.test(value) ? null : setCount(value);
 
   const handleSubmit = () => {
     dispatch({ type: LOAD_STATE })
     dispatch(sendFormAction({
       actionTo: 'addModelColor',
       body: {
-        count,
+        count: Number(count),
         colorId,
         modelId: currentModelId,
       },
@@ -38,6 +47,7 @@ const CreateModelColorComponent = ({ colors, load, currentModelId, dispatch }) =
     return (
       <>
         <FormSelect
+          value={colorId}
           onChange={setColorId}
           title='Колір'
           items={colorsMap}
@@ -64,9 +74,12 @@ const CreateModelColorComponent = ({ colors, load, currentModelId, dispatch }) =
 
 const mapStateToProps = (state) => {
   const model = selectCurrentModel(state) || {};
+  const currentModelColor = selectCurrentModelColor(state);
   return {
     colors: selectColors(state),
     currentModelId: model.modelId,
+    selectedColorId: currentModelColor.colorId,
+    selectedCount: currentModelColor.count,
   };
 };
 
