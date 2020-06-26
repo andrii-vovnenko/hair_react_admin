@@ -6,5 +6,7 @@ const ids = {
   HIGHLIGHTS_LIGHT: 5,
   HIGHLIGHTS_DARK: 6,
   AMBRE: 7,
+  LIGHT_BLOND: 8,
+  DARK_BLOND: 9,
 };
 export default ids;
