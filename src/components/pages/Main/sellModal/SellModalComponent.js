@@ -55,7 +55,7 @@ const SellModalComponent = ({ modalClose, models, dispatch, colors }) => {
   useEffect(() => {
     if (!modelToSearch) return;
     const timer = setTimeout(() => {
-      dispatch(getDynamicFormData({ modelName: modelToSearch }))
+      dispatch(getDynamicFormData({ modelName: encodeURIComponent(modelToSearch) }))
     }, 500);
     return () => clearTimeout(timer);
   }, [modelToSearch])
