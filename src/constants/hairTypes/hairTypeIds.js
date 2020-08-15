@@ -6,6 +6,8 @@ const ids = {
   HAIR_EXTENSION: 5,
   NAKLADKA: 6,
   BANGS: 7,
+  SCRUNCHY: 8,
+  STRIP: 9,
 };
 
 export default ids;

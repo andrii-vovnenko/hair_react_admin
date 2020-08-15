@@ -1,7 +1,7 @@
 import ids from './hairTypeIds';
 
 const {
-  HAIR_EXTENSION, KANEKALON, TAIL, WEAVE, WIG, BANGS, NAKLADKA,
+  HAIR_EXTENSION, KANEKALON, TAIL, WEAVE, WIG, BANGS, NAKLADKA, SCRUNCHY, STRIP,
 } = ids;
 
 export default {
@@ -12,4 +12,6 @@ export default {
   [WEAVE]: 'Шиньон',
   [BANGS]: 'Чубчик',
   [NAKLADKA]: 'Накладка',
+  [SCRUNCHY]: 'Резинка',
+  [STRIP]: 'Полоска',
 }
