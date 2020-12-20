@@ -11,15 +11,19 @@ import keyBy from "lodash/keyBy";
 import {connect} from "react-redux";
 import {selectAllColors, selectDynamicFormDataLoad, selectDynamicFormDataModels} from "../../../../selectors";
 
-const Datalist = ({ models }) => {
-  if (!models) return null;
+const isSelectedModel = (modelName, models) => {
+  if (models.length !== 1) return false;
+  return modelName === models[0].modelName;
+};
+
+const Datalist = ({ modelName, models }) => {
+  if (!models || isSelectedModel(modelName, models)) return null;
   return (
     <datalist id='data'>
       {models.map(
         ({modelName, modelId}) =>
           <option key={modelId} value={modelName}/>
-      )
-      }
+      )}
     </datalist>
   )
 };
@@ -56,7 +60,7 @@ const SellModalComponent = ({ modalClose, models, dispatch, colors }) => {
     if (!modelToSearch) return;
     const timer = setTimeout(() => {
       dispatch(getDynamicFormData({ modelName: encodeURIComponent(modelToSearch) }))
-    }, 500);
+    }, 1000);
     return () => clearTimeout(timer);
   }, [modelToSearch])
 
@@ -85,7 +89,7 @@ const SellModalComponent = ({ modalClose, models, dispatch, colors }) => {
           value={modelToSearch}
           list='data'
         />
-        <Datalist models={models} />
+        <Datalist models={models} modelName={modelToSearch} />
         <FormSelect
           disabled={!isValidName(modelToSearch, models)}
           onChange={setColorId}

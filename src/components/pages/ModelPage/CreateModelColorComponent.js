@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {connect} from "react-redux";
-import {selectColors, selectCurrentModel, selectCurrentModelColor} from "../../../selectors";
+import keyBy from 'lodash/keyBy';
+import {selectColors, selectCurrentModel, selectCurrentModelColor, selectModelColors} from "../../../selectors";
 import FormComponent from "../../form/FormComponent";
 import FormSelect from "../../form/FormSelect";
 import FormInputText from "../../form/FormInputText";
@@ -9,16 +10,14 @@ import {sendFormAction} from "../../../actions/sendForm";
 import {getModelAction} from "../../../actions/modelsActions";
 
 const CreateModelColorComponent = ({
-   colors, load, currentModelId, dispatch, selectedCount, selectedColorId,
+   colors, load, currentModelId, dispatch, selectedCount, selectedColorId, modelColorsByColorId
 }) => {
   const [colorId, setColorId] = useState(0);
   const [count, setCount] = useState('');
 
   useEffect(() => {
-    if (selectedCount && selectedColorId) {
-      setColorId(selectedColorId);
-      setCount(String(selectedCount));
-    }
+    setColorId(selectedColorId);
+    setCount(String(selectedCount || ''));
   }, [selectedCount, selectedColorId])
 
   const changeCount = (value) => /[^\d-]/g.test(value) ? null : setCount(value);
@@ -42,7 +41,8 @@ const CreateModelColorComponent = ({
   const formElements = () => {
     const colorsMap = {};
     Object.keys(colors).forEach((key) => {
-      colorsMap[key] = colors[key].colorName
+      const exist = modelColorsByColorId[key];
+      colorsMap[key] = `${colors[key].colorName}${!exist ? '' : ` - в наявності - ${exist.count} шт`}`;
     });
     return (
       <>
@@ -74,12 +74,15 @@ const CreateModelColorComponent = ({
 
 const mapStateToProps = (state) => {
   const model = selectCurrentModel(state) || {};
+  const modelColors = selectModelColors(state);
+  const modelColorsByColorId = keyBy(modelColors, 'colorId');
   const currentModelColor = selectCurrentModelColor(state);
   return {
     colors: selectColors(state),
     currentModelId: model.modelId,
     selectedColorId: currentModelColor.colorId,
     selectedCount: currentModelColor.count,
+    modelColorsByColorId,
   };
 };
 
